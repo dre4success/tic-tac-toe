@@ -51,7 +51,7 @@ func (h *Handler) CreateGame(w http.ResponseWriter, r *http.Request) {
 
 	_, err = h.db.DB.Exec(`
 		INSERT INTO games (id, board_size, status, mode, player_x_id, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?)
+		VALUES (?, ?, ?, ?, ?, ?, ?)
 	`, gameID, req.BoardSize, status, req.Mode, req.PlayerID, now, now)
 
 	if err != nil {
@@ -291,9 +291,6 @@ func (h *Handler) MakeMove(w http.ResponseWriter, r *http.Request) {
 		respondError(w, http.StatusInternalServerError, "Failed to save move")
 		return
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(newState)
 
 	// Broadcast to other players
 	msgType := models.WSTypeMoveMade

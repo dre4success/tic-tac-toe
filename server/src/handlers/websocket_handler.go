@@ -16,13 +16,13 @@ func (h *Handler) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	playerID := r.URL.Query().Get("player_id")
 
 	if gameID == "" || playerID == "" {
-		respondError(w, http.StatusBadRequest, "game_id and player_id are required")
+		http.Error(w, "game_id and player_id are required", http.StatusBadRequest)
 		return
 	}
 
 	gameState, err := game.BuildGameState(h.db.DB, gameID)
 	if err != nil {
-		respondError(w, http.StatusNotFound, "Game not found")
+		http.Error(w, "Game not found", http.StatusNotFound)
 		return
 	}
 
@@ -30,7 +30,7 @@ func (h *Handler) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		(gameState.PlayerOID != nil && playerID == *gameState.PlayerOID)
 
 	if !isPlayer && gameState.Mode == models.ModeOnline {
-		respondError(w, http.StatusForbidden, "You are not a player in this game")
+		http.Error(w, "You are not a player in this game", http.StatusForbidden)
 		return
 	}
 
