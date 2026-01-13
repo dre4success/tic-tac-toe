@@ -3,7 +3,7 @@ import type { User, PlayerStats } from '../lib/types'
 import { api } from '../lib/api'
 
 interface MainMenuProps {
-  user: User
+  user: User | null
   onLogout: () => void
   onPlayLocal: (boardSize: number) => void
   onPlayOnline: () => void
@@ -51,9 +51,9 @@ export function MainMenu({
               <span>TOE</span>
             </h1>
             <p className="text-muted">
-              Welcome,{' '}
+              Welcome{' '}
               <span style={{ color: 'var(--text-primary)' }}>
-                {user.username}
+                {user?.username}
               </span>
             </p>
           </div>
@@ -136,11 +136,11 @@ export function MainMenu({
                     </span>
                     <span
                       style={{
-                        fontWeight: stat.user_id === user.id ? 600 : 400,
+                        fontWeight: stat.user_id === user?.id ? 600 : 400,
                       }}
                     >
                       {stat.username}
-                      {stat.user_id === user.id && (
+                      {stat.user_id === user?.id && (
                         <span
                           className="text-muted"
                           style={{ fontSize: '12px', marginLeft: '8px' }}

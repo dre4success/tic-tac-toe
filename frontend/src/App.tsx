@@ -9,7 +9,7 @@ import { OnlineLobby } from './components/OnlineLobby'
 import { OnlineGame } from './components/OnlineGame'
 import { Toast } from './components/Toast'
 
-type Screen = 'menu' | 'local' | 'online-lobby' | 'online-game'
+type Screen = 'menu' | 'local' | 'online-lobby' | 'online-game' | 'login'
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('menu')
@@ -100,7 +100,7 @@ export default function App() {
   }
 
   // Not logged in
-  if (!user) {
+  /*   if (!user) {
     return (
       <>
         <LoginScreen
@@ -111,7 +111,7 @@ export default function App() {
         {error && <Toast message={error} onClose={() => setError(null)} />}
       </>
     )
-  }
+  } */
 
   // Render current screen
   return (
@@ -121,7 +121,27 @@ export default function App() {
           user={user}
           onLogout={logout}
           onPlayLocal={handlePlayLocal}
-          onPlayOnline={() => setScreen('online-lobby')}
+          onPlayOnline={() => {
+            if (user) {
+              setScreen('online-lobby')
+            } else {
+              setScreen('login')
+            }
+          }}
+        />
+      )}
+
+      {screen === 'login' && (
+        <LoginScreen
+          onLogin={async (username) => {
+            const loggedInUser = await login(username)
+            if (loggedInUser) {
+              setScreen('online-lobby')
+            }
+          }}
+          isLoading={userLoading}
+          error={userError}
+          onBack={() => setScreen('menu')}
         />
       )}
 
@@ -137,7 +157,7 @@ export default function App() {
         />
       )}
 
-      {screen === 'online-lobby' && (
+      {screen === 'online-lobby' && user && (
         <OnlineLobby
           user={user}
           onBack={() => setScreen('menu')}
@@ -147,7 +167,7 @@ export default function App() {
         />
       )}
 
-      {screen === 'online-game' && (
+      {screen === 'online-game' && user && (
         <OnlineGame
           user={user}
           gameState={onlineGame.gameState}

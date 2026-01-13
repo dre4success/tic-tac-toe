@@ -4,9 +4,15 @@ interface LoginScreenProps {
   onLogin: (username: string) => Promise<unknown>
   isLoading: boolean
   error: string | null
+  onBack: () => void
 }
 
-export function LoginScreen({ onLogin, isLoading, error }: LoginScreenProps) {
+export function LoginScreen({
+  onLogin,
+  isLoading,
+  error,
+  onBack,
+}: LoginScreenProps) {
   const [username, setUsername] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,6 +28,9 @@ export function LoginScreen({ onLogin, isLoading, error }: LoginScreenProps) {
       style={{ padding: '24px' }}
     >
       <div className="card" style={{ maxWidth: '400px', width: '100%' }}>
+        <button onClick={onBack} className="btn btn-ghost mb-4">
+          ← Back
+        </button>
         <div className="text-center mb-6">
           <h1 style={{ fontSize: '32px', marginBottom: '8px' }}>
             <span style={{ color: 'var(--accent-x)' }}>TIC</span>

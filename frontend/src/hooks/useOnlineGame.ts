@@ -5,16 +5,10 @@ import { api, GameWebSocket } from '../lib/api'
 interface UseOnlineGameOptions {
   user: User | null
   gameId: string | null
-  onGameUpdate?: (state: GameState) => void
   onError?: (error: string) => void
 }
 
-export function useOnlineGame({
-  user,
-  gameId,
-  onGameUpdate,
-  onError,
-}: UseOnlineGameOptions) {
+export function useOnlineGame({ user, gameId, onError }: UseOnlineGameOptions) {
   const [gameState, setGameState] = useState<GameState | null>(null)
   const [isConnected, setIsConnected] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -30,7 +24,6 @@ export function useOnlineGame({
         case 'GAME_OVER':
           if (message.payload) {
             setGameState(message.payload)
-            onGameUpdate?.(message.payload)
           }
           break
         case 'ERROR':
@@ -43,7 +36,7 @@ export function useOnlineGame({
           console.log('Unknown message type:', message.type)
       }
     },
-    [onGameUpdate, onError]
+    [onError]
   )
 
   // connect to WebSocket when game and user are available

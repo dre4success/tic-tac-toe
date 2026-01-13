@@ -41,7 +41,7 @@ func (h *Handler) GetStats(w http.ResponseWriter, r *http.Request) {
 	var stats []models.PlayerStats
 	for rows.Next() {
 		var s models.PlayerStats
-		if err := rows.Scan(&s.UserID, &s.Username, &s.Losses, &s.Draws, &s.Total); err != nil {
+		if err := rows.Scan(&s.UserID, &s.Username, &s.Wins, &s.Losses, &s.Draws, &s.Total); err != nil {
 			log.Printf("Error scanning stats: %v", err)
 			continue
 		}
