@@ -2,6 +2,8 @@
 
 A real-time multiplayer Tic Tac Toe game with WebSocket support, built with Go backend and React frontend.
 
+🎮 **Play now:** [tictactoe.dre4success.com](https://tictactoe.dre4success.com)
+
 ## Features
 
 - **Local Play**: Two players on the same device
@@ -14,7 +16,7 @@ A real-time multiplayer Tic Tac Toe game with WebSocket support, built with Go b
 ## Tech Stack
 
 **Backend:**
-- Go 1.25+
+- Go 1.22+
 - SQLite with migrations
 - Gorilla WebSocket
 - Standard library HTTP router
@@ -23,8 +25,6 @@ A real-time multiplayer Tic Tac Toe game with WebSocket support, built with Go b
 - React 18 + TypeScript
 - Vite
 - Custom CSS (no framework)
-
-
 
 ## Local Development
 
@@ -35,35 +35,32 @@ A real-time multiplayer Tic Tac Toe game with WebSocket support, built with Go b
 - npm
 
 ### 1. Clone the repository
-
 ```bash
-git clone https://github.com/yourusername/tic-tac-toe.git
+git clone https://github.com/dre4success/tic-tac-toe.git
 cd tic-tac-toe
 ```
 
 ### 2. Run the backend
-
 ```bash
-# From project root
+cd server
 go mod download
-go run main.go
+go run cmd/server/main.go
 ```
 
 Server starts at `http://localhost:4000`
 
 ### 3. Run the frontend
-
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-Frontend starts at `http://localhost:5143`
+Frontend starts at `http://localhost:5173`
 
 ### 4. Open the app
 
-Visit `http://localhost:5143` in your browser.
+Visit `http://localhost:5173` in your browser.
 
 ## API Endpoints
 
