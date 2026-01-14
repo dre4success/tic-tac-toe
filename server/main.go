@@ -4,11 +4,11 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/dre4success/tic-tac-toe/server-go/src/database"
 	"github.com/dre4success/tic-tac-toe/server-go/src/handlers"
 	"github.com/dre4success/tic-tac-toe/server-go/src/wsinternal"
-	"github.com/rs/cors"
 )
 
 func main() {
@@ -54,23 +54,42 @@ func main() {
 	// WebSocket route
 	mux.HandleFunc("GET /ws", h.HandleWebSocket)
 
+	// Serve static files (frontend)
+	staticDir := "./static"
+	if _, err := os.Stat(staticDir); err == nil {
+		fs := http.FileServer(http.Dir(staticDir))
+
+		mux.Handle("/assets/", fs)
+		// serve index.html for non-API routes
+		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			// Skip API and WebSocket routes
+			if strings.HasPrefix(r.URL.Path, "/api") || strings.HasPrefix(r.URL.Path, "/ws") {
+				http.NotFound(w, r)
+				return
+			}
+
+			// Check if file exists
+			path := staticDir + r.URL.Path
+			if _, err := os.Stat(path); err == nil && r.URL.Path != "/" {
+				fs.ServeHTTP(w, r)
+				return
+			}
+
+			http.ServeFile(w, r, staticDir+"/index.html")
+		})
+		log.Println("✅ Serving static files from ./static")
+	} else {
+		log.Println("⚠️ No static directory found, running API only")
+	}
+
 	// Health check
 	mux.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))
 	})
 
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000", "http://localhost:5173"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Content-Type", "Authorization"},
-		AllowCredentials: true,
-	})
-
-	handler := c.Handler(mux)
-
 	log.Printf("🚀 Server starting on http://localhost:%s", port)
-	if err := http.ListenAndServe(":"+port, handler); err != nil {
+	if err := http.ListenAndServe(":"+port, mux); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
 }

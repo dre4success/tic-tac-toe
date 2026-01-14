@@ -57,9 +57,11 @@ export function MainMenu({
               </span>
             </p>
           </div>
-          <button onClick={onLogout} className="btn btn-ghost">
-            Logout
-          </button>
+          {user && (
+            <button onClick={onLogout} className="btn btn-ghost">
+              Logout
+            </button>
+          )}
         </div>
 
         {/* Game Options */}
