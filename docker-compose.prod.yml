@@ -9,15 +9,15 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=web_proxy_net"
       # HTTP to HTTPS redirect
-      - "traefik.http.routers.bethel-http.rule=Host(`${DOMAIN}`)"
-      - "traefik.http.routers.bethel-http.entrypoints=web"
-      - "traefik.http.routers.bethel-http.middlewares=https-redirect"
+      - "traefik.http.routers.tictactoe-http.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.tictactoe-http.entrypoints=web"
+      - "traefik.http.routers.tictactoe-http.middlewares=https-redirect"
       - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
       # HTTPS
-      - "traefik.http.routers.bethel.rule=Host(`${DOMAIN}`)"
-      - "traefik.http.routers.bethel.entrypoints=websecure"
-      - "traefik.http.routers.bethel.tls.certresolver=myresolver"
-      - "traefik.http.services.bethel.loadbalancer.server.port=4000"
+      - "traefik.http.routers.tictactoe.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.tictactoe.entrypoints=websecure"
+      - "traefik.http.routers.tictactoe.tls.certresolver=myresolver"
+      - "traefik.http.services.tictactoe.loadbalancer.server.port=4000"
     networks:
       - web_proxy_net
 networks:
