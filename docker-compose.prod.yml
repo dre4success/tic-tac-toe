@@ -1,0 +1,25 @@
+services:
+  tic-tac-toe:
+    image: ghcr.io/dre4success/tic-tac-toe-server:latest
+    container_name: tic-tac-toe-app
+    restart: unless-stopped
+    environment:
+      - PORT=4000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web_proxy_net"
+      # HTTP to HTTPS redirect
+      - "traefik.http.routers.bethel-http.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.bethel-http.entrypoints=web"
+      - "traefik.http.routers.bethel-http.middlewares=https-redirect"
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      # HTTPS
+      - "traefik.http.routers.bethel.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.bethel.entrypoints=websecure"
+      - "traefik.http.routers.bethel.tls.certresolver=myresolver"
+      - "traefik.http.services.bethel.loadbalancer.server.port=4000"
+    networks:
+      - web_proxy_net
+networks:
+  web_proxy_net:
+    external: true
