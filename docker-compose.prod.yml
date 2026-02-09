@@ -11,8 +11,9 @@ services:
       # HTTP to HTTPS redirect
       - "traefik.http.routers.tictactoe-http.rule=Host(`${DOMAIN}`)"
       - "traefik.http.routers.tictactoe-http.entrypoints=web"
-      - "traefik.http.routers.tictactoe-http.middlewares=https-redirect"
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.tictactoe-http.middlewares=tictactoe-https-redirect"
+      - "traefik.http.middlewares.tictactoe-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.tictactoe-https-redirect.redirectscheme.permanent=true"
       # HTTPS
       - "traefik.http.routers.tictactoe.rule=Host(`${DOMAIN}`)"
       - "traefik.http.routers.tictactoe.entrypoints=websecure"
